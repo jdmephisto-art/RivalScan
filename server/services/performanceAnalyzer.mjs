@@ -43,11 +43,22 @@ class PerformanceAnalyzer {
       const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
       console.log('Chrome path:', executablePath);
       
+      console.log('Launching browser...');
       browser = await puppeteer.launch({
         headless: 'new',
-        executablePath: executablePath || undefined,
-        args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
+        executablePath: chromePath,
+        args: [
+          '--no-sandbox',
+          '--disable-setuid-sandbox',
+          '--disable-dev-shm-usage',
+          '--disable-gpu',
+          '--no-first-run',
+          '--no-zygote',
+          '--single-process'
+        ],
+        timeout: 60000
       });
+      console.log('Browser launched successfully');
 
       // Run Lighthouse audit
       const result = await lighthouse(normalizedUrl, {
