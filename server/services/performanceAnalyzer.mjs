@@ -22,9 +22,8 @@ class PerformanceAnalyzer {
       // Launch browser
       browser = await puppeteer.launch({
         headless: 'new',
-        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-      });
+        });
 
       // Run Lighthouse audit
       const result = await lighthouse(normalizedUrl, {
