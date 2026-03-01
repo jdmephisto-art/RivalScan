@@ -1,5 +1,7 @@
 import lighthouse from 'lighthouse';
 import puppeteer from 'puppeteer';
+import { execSync } from 'child_process';
+import fs from 'fs';
 
 class PerformanceAnalyzer {
   async analyze(url) {
@@ -17,6 +19,24 @@ class PerformanceAnalyzer {
           opportunities: [],
           error: 'Invalid URL format'
         };
+      }
+      
+      const chromePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/opt/render/.cache/puppeteer/chrome/linux-145.0.7632.77/chrome-linux64/chrome';
+      
+      if (!fs.existsSync(chromePath)) {
+        console.log('Chrome not found, installing...');
+        try {
+          execSync('npx puppeteer browsers install chrome', { 
+            stdio: 'inherit',
+            timeout: 120000 
+          });
+          console.log('Chrome installed successfully');
+        } catch (installError) {
+          console.error('Failed to install Chrome:', installError.message);
+          throw new Error('Chrome installation failed');
+        }
+      } else {
+        console.log('Chrome found at:', chromePath);
       }
       
       // Launch browser
