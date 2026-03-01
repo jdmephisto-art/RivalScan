@@ -20,10 +20,14 @@ class PerformanceAnalyzer {
       }
       
       // Launch browser
+      const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+      console.log('Chrome path:', executablePath);
+      
       browser = await puppeteer.launch({
         headless: 'new',
+        executablePath: executablePath || undefined,
         args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-dev-shm-usage']
-        });
+      });
 
       // Run Lighthouse audit
       const result = await lighthouse(normalizedUrl, {
