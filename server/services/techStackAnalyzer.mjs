@@ -183,21 +183,24 @@ class TechStackAnalyzer {
             case 'script':
               const scripts = $('script[src]').map((_, el) => $(el).attr('src')).get().join(' ');
               const inlineScripts = $('script').map((_, el) => $(el).html()).get().join(' ');
-              if (pattern.pattern.test(scripts) || pattern.pattern.test(inlineScripts)) {
+              const scriptPattern = pattern.pattern instanceof RegExp ? pattern.pattern : new RegExp(pattern.pattern, 'i');
+              if (scriptPattern.test(scripts) || scriptPattern.test(inlineScripts)) {
                 isDetected = true;
               }
               break;
 
             case 'meta':
               const metaContent = $('meta').map((_, el) => $(el).attr('content') || '').get().join(' ');
-              if (pattern.pattern.test(metaContent)) {
+              const metaPattern = pattern.pattern instanceof RegExp ? pattern.pattern : new RegExp(pattern.pattern, 'i');
+              if (metaPattern.test(metaContent)) {
                 isDetected = true;
               }
-              break;
+            break;
 
             case 'class':
               const allClasses = $('*[class]').map((_, el) => $(el).attr('class')).get().join(' ');
-              if (pattern.pattern.test(allClasses)) {
+              const classPattern = pattern.pattern instanceof RegExp ? pattern.pattern : new RegExp(pattern.pattern, 'i');
+              if (classPattern.test(allClasses)) {
                 isDetected = true;
               }
               break;
@@ -210,21 +213,24 @@ class TechStackAnalyzer {
 
             case 'header':
               const headerStr = JSON.stringify(headers);
-              if (pattern.pattern.test(headerStr)) {
+              const headerPattern = pattern.pattern instanceof RegExp ? pattern.pattern : new RegExp(pattern.pattern, 'i');
+              if (headerPattern.test(headerStr)) {
                 isDetected = true;
               }
-              break;
+            break;
 
             case 'server':
               const server = headers.server || '';
-              if (pattern.pattern.test(server)) {
+              const serverPattern = pattern.pattern instanceof RegExp ? pattern.pattern : new RegExp(pattern.pattern, 'i');
+              if (serverPattern.test(server)) {
                 isDetected = true;
               }
               break;
 
             case 'link':
               const links = $('link[href]').map((_, el) => $(el).attr('href')).get().join(' ');
-              if (pattern.pattern.test(links)) {
+              const linkPattern = pattern.pattern instanceof RegExp ? pattern.pattern : new RegExp(pattern.pattern, 'i');
+              if (linkPattern.test(links)) {
                 isDetected = true;
               }
               break;
