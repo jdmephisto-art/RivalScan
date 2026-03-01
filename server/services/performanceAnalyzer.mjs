@@ -1,12 +1,13 @@
-import lighthouse from 'lighthouse';
-import puppeteer from 'puppeteer';
-import { execSync } from 'child_process';
-import fs from 'fs';
+import axios from 'axios';
 
 class PerformanceAnalyzer {
+  constructor() {
+    // Бесплатный API ключ Google (можно использовать без ключа, но с лимитами)
+    // Для продакшена получите ключ: https://developers.google.com/speed/docs/insights/v5/get-started
+    this.apiKey = process.env.PAGESPEED_API_KEY || '';
+  }
+
   async analyze(url) {
-    let browser = null;
-    
     try {
       const normalizedUrl = this.normalizeUrl(url);
       
@@ -20,111 +21,71 @@ class PerformanceAnalyzer {
           error: 'Invalid URL format'
         };
       }
-      
-      const chromePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/opt/render/.cache/puppeteer/chrome/linux-145.0.7632.77/chrome-linux64/chrome';
-      
-      if (!fs.existsSync(chromePath)) {
-        console.log('Chrome not found, installing...');
-        try {
-          execSync('npx puppeteer browsers install chrome', { 
-            stdio: 'inherit',
-            timeout: 120000 
-          });
-          console.log('Chrome installed successfully');
-        } catch (installError) {
-          console.error('Failed to install Chrome:', installError.message);
-          throw new Error('Chrome installation failed');
-        }
-      } else {
-        console.log('Chrome found at:', chromePath);
-      }
-      
-      // Launch browser
-      const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
-      console.log('Chrome path:', executablePath);
-      
-      console.log('Launching browser...');
-      browser = await puppeteer.launch({
-        headless: 'new',
-        executablePath: chromePath,
-        args: [
-          '--no-sandbox',
-          '--disable-setuid-sandbox',
-          '--disable-dev-shm-usage',
-          '--disable-gpu',
-          '--no-first-run',
-          '--no-zygote',
-          '--single-process'
-        ],
-        timeout: 60000
-      });
-      console.log('Browser launched successfully');
 
-      // Run Lighthouse audit
-      const result = await lighthouse(normalizedUrl, {
-        port: new URL(browser.wsEndpoint()).port,
-        output: 'json',
-        logLevel: 'error',
-        onlyCategories: ['performance', 'accessibility', 'best-practices', 'seo'],
-        throttling: {
-          rttMs: 150,
-          throughputKbps: 1638.4,
-          cpuSlowdownMultiplier: 4,
-          requestLatencyMs: 562.5,
-          downloadThroughputKbps: 1474.5600000000002,
-          uploadThroughputKbps: 675
+      console.log('Analyzing performance via API:', normalizedUrl);
+
+      // Формируем URL для API
+      const apiUrl = this.apiKey 
+        ? `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(normalizedUrl)}&key=${this.apiKey}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO`
+        : `https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(normalizedUrl)}&category=PERFORMANCE&category=ACCESSIBILITY&category=BEST_PRACTICES&category=SEO`;
+
+      const response = await axios.get(apiUrl, {
+        timeout: 60000,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; RivalScan/1.0)'
         }
       });
 
-      const lhr = result.lhr;
+      const data = response.data;
+      const lighthouse = data.lighthouseResult;
+      const categories = lighthouse.categories;
+      const audits = lighthouse.audits;
 
-      // Extract key metrics
+      // Извлекаем метрики
       const metrics = {
         url: normalizedUrl,
         scores: {
-          performance: Math.round(lhr.categories.performance.score * 100),
-          accessibility: Math.round(lhr.categories.accessibility.score * 100),
-          bestPractices: Math.round(lhr.categories['best-practices'].score * 100),
-          seo: Math.round(lhr.categories.seo.score * 100)
+          performance: Math.round((categories.performance?.score || 0) * 100),
+          accessibility: Math.round((categories.accessibility?.score || 0) * 100),
+          bestPractices: Math.round((categories['best-practices']?.score || 0) * 100),
+          seo: Math.round((categories.seo?.score || 0) * 100)
         },
         timing: {
-          firstContentfulPaint: this.formatTime(lhr.audits['first-contentful-paint'].numericValue),
-          largestContentfulPaint: this.formatTime(lhr.audits['largest-contentful-paint'].numericValue),
-          timeToInteractive: this.formatTime(lhr.audits['interactive'].numericValue),
-          speedIndex: this.formatTime(lhr.audits['speed-index'].numericValue),
-          totalBlockingTime: this.formatTime(lhr.audits['total-blocking-time'].numericValue),
-          cumulativeLayoutShift: lhr.audits['cumulative-layout-shift'].numericValue?.toFixed(3) || '0'
+          firstContentfulPaint: this.formatTime(audits['first-contentful-paint']?.numericValue),
+          largestContentfulPaint: this.formatTime(audits['largest-contentful-paint']?.numericValue),
+          timeToInteractive: this.formatTime(audits['interactive']?.numericValue),
+          speedIndex: this.formatTime(audits['speed-index']?.numericValue),
+          totalBlockingTime: this.formatTime(audits['total-blocking-time']?.numericValue),
+          cumulativeLayoutShift: audits['cumulative-layout-shift']?.numericValue?.toFixed(3) || '0'
         },
         diagnostics: {
-          serverResponseTime: this.formatTime(lhr.audits['server-response-time'].numericValue),
-          renderBlockingResources: lhr.audits['render-blocking-resources'].details?.items?.length || 0,
-          unusedJavascript: this.formatBytes(lhr.audits['unused-javascript'].details?.overallSavingsBytes || 0),
-          unusedCss: this.formatBytes(lhr.audits['unused-css-rules'].details?.overallSavingsBytes || 0),
-          imageOptimization: this.formatBytes(lhr.audits['uses-optimized-images'].details?.overallSavingsBytes || 0)
+          serverResponseTime: this.formatTime(audits['server-response-time']?.numericValue),
+          renderBlockingResources: audits['render-blocking-resources']?.details?.items?.length || 0,
+          unusedJavascript: this.formatBytes(audits['unused-javascript']?.details?.overallSavingsBytes || 0),
+          unusedCss: this.formatBytes(audits['unused-css-rules']?.details?.overallSavingsBytes || 0),
+          imageOptimization: this.formatBytes(audits['uses-optimized-images']?.details?.overallSavingsBytes || 0)
         },
-        opportunities: this.extractOpportunities(lhr)
+        opportunities: this.extractOpportunities(audits)
       };
 
-      await browser.close();
+      console.log('Performance analysis completed:', metrics.scores);
       return metrics;
 
     } catch (error) {
-      if (browser) await browser.close();
       console.error('Performance analysis error:', error.message);
       
-      // Return fallback data if Lighthouse fails
       return {
         url,
         scores: { performance: 0, accessibility: 0, bestPractices: 0, seo: 0 },
         timing: {},
         diagnostics: {},
         opportunities: [],
-        error: error.message
+        error: error.response?.data?.error?.message || error.message
       };
     }
   }
 
-  extractOpportunities(lhr) {
+  extractOpportunities(audits) {
     const opportunities = [];
     const opportunityAudits = [
       'render-blocking-resources',
@@ -140,7 +101,7 @@ class PerformanceAnalyzer {
     ];
 
     opportunityAudits.forEach(auditId => {
-      const audit = lhr.audits[auditId];
+      const audit = audits[auditId];
       if (audit && audit.score !== null && audit.score < 1 && audit.details?.overallSavingsMs > 0) {
         opportunities.push({
           title: audit.title,
@@ -174,16 +135,12 @@ class PerformanceAnalyzer {
     if (!url) return null;
     
     let normalized = url.trim();
-    
-    // Remove trailing slash
     normalized = normalized.replace(/\/$/, '');
     
-    // Add protocol if missing
     if (!normalized.startsWith('http://') && !normalized.startsWith('https://')) {
       normalized = `https://${normalized}`;
     }
     
-    // Validate URL
     try {
       const urlObj = new URL(normalized);
       if (!urlObj.hostname) return null;
