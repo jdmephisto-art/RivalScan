@@ -1,0 +1,39 @@
+{
+  "app": {
+    "title": "Анализ конкурентов",
+    "description": "Анализируйте технологии, производительность и фичи конкурентов"
+  },
+  "nav": {
+    "analyze": "Анализ",
+    "history": "История",
+    "settings": "Настройки"
+  },
+  "form": {
+    "yourUrl": "URL вашего сайта",
+    "competitorUrl": "URL сайта конкурента",
+    "analyzeBtn": "Анализировать конкурента",
+    "analyzing": "Анализируем...",
+    "placeholder": "example.com"
+  },
+  "results": {
+    "title": "Сводка анализа конкурентов",
+    "techStack": "Технологический стек",
+    "performance": "Производительность",
+    "seo": "SEO",
+    "features": "Функционал",
+    "recommendations": "Рекомендации",
+    "winner": "Победитель",
+    "tie": "Ничья",
+    "you": "Вы",
+    "competitor": "Конкурент"
+  },
+  "errors": {
+    "invalidUrl": "Неверный формат URL",
+    "analysisFailed": "Ошибка анализа"
+  },
+  "language": {
+    "select": "Язык",
+    "en": "English",
+    "ru": "Русский"
+  }
+}
