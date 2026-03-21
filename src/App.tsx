@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { Toaster } from '@/components/ui/sonner';
 import { toast } from 'sonner';
 import { AnalysisForm } from '@/components/AnalysisForm';
@@ -55,18 +56,21 @@ function App() {
       <Toaster position="top-center" />
       
       {/* Header */}
-      <header className="border-b bg-card">
+       <header className="border-b bg-card">
         <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary rounded-lg">
-              <Target className="w-6 h-6 text-primary-foreground" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="p-2 bg-primary rounded-lg">
+                <Target className="w-6 h-6 text-primary-foreground" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold">Competitor Tech Intelligence</h1>
+                <p className="text-sm text-muted-foreground">
+                  Analyze your competitors' tech stack, performance, and features
+                </p>
+              </div>
             </div>
-            <div>
-              <h1 className="text-2xl font-bold">Competitor Tech Intelligence</h1>
-              <p className="text-sm text-muted-foreground">
-                Analyze your competitors' tech stack, performance, and features
-              </p>
-            </div>
+            <LanguageSwitcher />
           </div>
         </div>
       </header>
