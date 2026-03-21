@@ -65,7 +65,7 @@
     "zod": "^4.3.5",
     "react-i18next": "^13.0.0",
     "i18next": "^23.0.0",
-    "i18next-browser-languagedetector": "^7.0.0",
+    "i18next-browser-languagedetector": "^7.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
