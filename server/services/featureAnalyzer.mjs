@@ -5,6 +5,103 @@ class FeatureAnalyzer {
   constructor() {
     // Feature patterns to detect
     this.featurePatterns = {
+        // NEW: Communication & Social
+      'Telegram Channel': {
+        selectors: ['a[href*="t.me/"]', 'a[href*="telegram.me/"]', '[class*="telegram"]'],
+        text: [/join our telegram/i, /telegram channel/i, /telegram/i]
+      },
+      'WhatsApp Button': {
+        selectors: ['a[href*="wa.me/"]', 'a[href*="whatsapp.com"]', '[class*="whatsapp"]'],
+        text: [/chat on whatsapp/i, /whatsapp us/i, /whatsapp/i]
+      },
+      'Email Capture': {
+        selectors: ['input[type="email"]', 'form[action*="email"]', '[class*="email-capture"]'],
+        text: [/subscribe to our newsletter/i, /get updates/i, /email updates/i]
+      },
+      
+      // NEW: Content & Marketing
+      'Blog/Content Hub': {
+        selectors: [
+          'a[href*="/blog"]', 'a[href*="/articles"]', 'a[href*="/resources"]',
+          '[class*="blog-post"]', '[class*="article-card"]'
+        ],
+        text: [/latest articles/i, /from the blog/i, /resources/i, /insights/i]
+      },
+      'Help Center/Docs': {
+        selectors: [
+          'a[href*="/help"]', 'a[href*="/docs"]', 'a[href*="/documentation"]',
+          'a[href*="/support"]', '[class*="help-center"]'
+        ],
+        text: [/help center/i, /documentation/i, /knowledge base/i, /support/i]
+      },
+      'Integrations Page': {
+        selectors: [
+          'a[href*="/integrations"]', '[class*="integration"]',
+          '.partner-logos', '.integration-grid'
+        ],
+        text: [/integrations/i, /connect with/i, /works with/i, /compatible with/i]
+      },
+      'API Documentation': {
+        selectors: [
+          'a[href*="/api"]', 'a[href*="/developers"]', '[class*="api-docs"]'
+        ],
+        text: [/api reference/i, /developer docs/i, /api documentation/i]
+      },
+      
+      // NEW: Trust & Social
+      'Team/About Page': {
+        selectors: [
+          'a[href*="/about"]', 'a[href*="/team"]', '[class*="team-member"]'
+        ],
+        text: [/meet the team/i, /about us/i, /our story/i, /who we are/i]
+      },
+      'Careers/Jobs': {
+        selectors: [
+          'a[href*="/careers"]', 'a[href*="/jobs"]', '[class*="job-opening"]'
+        ],
+        text: [/we're hiring/i, /join our team/i, /open positions/i, /careers/i]
+      },
+      'Open Source': {
+        selectors: [
+          'a[href*="github.com"]', '[class*="open-source"]', '.github-stars'
+        ],
+        text: [/open source/i, /github/i, /contribute/i, /public repo/i]
+      },
+      'Community/Forum': {
+        selectors: [
+          'a[href*="/community"]', 'a[href*="/forum"]', 'a[href*="discord.gg"]',
+          '[class*="community"]'
+        ],
+        text: [/join our community/i, /community forum/i, /discord server/i, /slack community/i]
+      },
+      
+      // NEW: Product
+      'Changelog/Updates': {
+        selectors: [
+          'a[href*="/changelog"]', 'a[href*="/updates"]', 'a[href*="/releases"]',
+          '[class*="changelog"]'
+        ],
+        text: [/what's new/i, /changelog/i, /latest updates/i, /product updates/i]
+      },
+      'Status Page': {
+        selectors: [
+          'a[href*="status."]', 'a[href*="/status"]', '[class*="status-page"]'
+        ],
+        text: [/system status/i, /service status/i, /uptime/i, /operational/i]
+      },
+      'Affiliate/Referral': {
+        selectors: [
+          'a[href*="/affiliate"]', 'a[href*="/referral"]', '[class*="affiliate"]'
+        ],
+        text: [/become an affiliate/i, /refer a friend/i, /partner program/i, /earn commission/i]
+      },
+      'Calculator/Estimator': {
+        selectors: [
+          '[class*="calculator"]', '[class*="estimator"]', '.pricing-calculator',
+          'input[type="range"]', '.slider-input'
+        ],
+        text: [/calculate your price/i, /cost estimator/i, /savings calculator/i, /price calculator/i]
+      },
       // Communication features
       'Live Chat': {
         selectors: [
@@ -32,18 +129,16 @@ class FeatureAnalyzer {
       },
       'Free Trial CTA': {
         selectors: [
-          'a:contains("Free Trial")', 'a:contains("Start Free")',
-          'button:contains("Free Trial")', 'button:contains("Try Free")',
-          '[class*="trial"]', '[class*="free-trial"]'
+          '[class*="trial"]', '[class*="free-trial"]',
+          'a[href*="trial"]', 'a[href*="signup"]'
         ],
-        text: [/free trial/i, /start free/i, /try free/i, /try it free/i]
+        text: [/free trial/i, /start free/i, /try free/i, /try it free/i, /get started free/i]
       },
       'Demo Booking': {
         selectors: [
-          'a:contains("Demo")', 'a:contains("Book a Demo")',
-          'button:contains("Demo")', '[class*="demo"]'
+          '[class*="demo"]', 'a[href*="demo"]', 'a[href*="book"]'
         ],
-        text: [/book a demo/i, /schedule demo/i, /request demo/i]
+        text: [/book a demo/i, /schedule demo/i, /request demo/i, /get a demo/i]
       },
 
       // Content features
@@ -51,9 +146,9 @@ class FeatureAnalyzer {
         selectors: [
           '.testimonial', '.testimonials', '[class*="testimonial"]',
           '.review', '.reviews', '[class*="review"]',
-          '.quote', '.quotes'
+          '.quote', '.quotes', '[class*="feedback"]'
         ],
-        text: [/testimonial/i, /what our customers say/i, /customer reviews/i]
+        text: [/testimonial/i, /what our customers say/i, /customer reviews/i, /trusted by/i]
       },
       'Case Studies': {
         selectors: [
@@ -140,15 +235,15 @@ class FeatureAnalyzer {
       'User Login': {
         selectors: [
           'a[href*="login"]', 'a[href*="signin"]',
-          'button:contains("Login")', 'button:contains("Sign In")',
-          '.login-form', '[class*="login"]'
+          '.login-form', '[class*="login"]',
+          'button[class*="login"]', 'a[class*="login"]'
         ]
       },
       'User Signup': {
         selectors: [
           'a[href*="signup"]', 'a[href*="register"]',
-          'button:contains("Sign Up")', 'button:contains("Get Started")',
-          '.signup-form', '[class*="signup"]'
+          '.signup-form', '[class*="signup"]',
+          'button[class*="signup"]', 'a[class*="get-started"]'
         ]
       },
 
