@@ -2,18 +2,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Trophy, TrendingUp, AlertTriangle, Lightbulb, Target, Zap, Search, Code2, Sparkles } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { ComparisonData } from '@/types';
 
 interface ComparisonSummaryProps {
   data: ComparisonData;
 }
 
-const WinnerBadge = ({ winner }: { winner: string | null }) => {
+const WinnerBadge = ({ winner, t }: { winner: string | null; t: (key: string) => string }) => {
   if (winner === 'you') {
     return (
       <Badge className="bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
         <Trophy className="w-3 h-3 mr-1" />
-        You Win
+        {t('results.youWin')}
       </Badge>
     );
   }
@@ -21,24 +22,26 @@ const WinnerBadge = ({ winner }: { winner: string | null }) => {
     return (
       <Badge className="bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
         <Target className="w-3 h-3 mr-1" />
-        Competitor Wins
+        {t('results.competitorWins')}
       </Badge>
     );
   }
   return (
     <Badge variant="secondary">
-      Tie
+      {t('results.tie')}
     </Badge>
   );
 };
 
 export function ComparisonSummary({ data }: ComparisonSummaryProps) {
+  const { t } = useTranslation();
+
   return (
     <Card className="border-primary/20">
       <CardHeader className="pb-3">
         <CardTitle className="text-xl flex items-center gap-2">
           <TrendingUp className="w-6 h-6 text-primary" />
-          Competitive Analysis Summary
+          {t('results.title')}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -47,9 +50,9 @@ export function ComparisonSummary({ data }: ComparisonSummaryProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Code2 className="w-5 h-5 text-blue-500" />
-              <span className="font-medium">Technology Stack</span>
+              <span className="font-medium">{t('results.techStack')}</span>
             </div>
-            <WinnerBadge winner={data.techStack.winner} />
+            <WinnerBadge winner={data.techStack.winner} t={t} />
           </div>
           <div className="space-y-1">
             {data.techStack.insights.map((insight, idx) => (
@@ -68,9 +71,9 @@ export function ComparisonSummary({ data }: ComparisonSummaryProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-yellow-500" />
-              <span className="font-medium">Performance</span>
+              <span className="font-medium">{t('results.performance')}</span>
             </div>
-            <WinnerBadge winner={data.performance.winner} />
+            <WinnerBadge winner={data.performance.winner} t={t} />
           </div>
           <div className="space-y-1">
             {data.performance.insights.map((insight, idx) => (
@@ -89,9 +92,9 @@ export function ComparisonSummary({ data }: ComparisonSummaryProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Search className="w-5 h-5 text-green-500" />
-              <span className="font-medium">SEO</span>
+              <span className="font-medium">{t('results.seo')}</span>
             </div>
-            <WinnerBadge winner={data.seo.winner} />
+            <WinnerBadge winner={data.seo.winner} t={t} />
           </div>
           <div className="space-y-1">
             {data.seo.insights.map((insight, idx) => (
@@ -110,9 +113,9 @@ export function ComparisonSummary({ data }: ComparisonSummaryProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-purple-500" />
-              <span className="font-medium">Features</span>
+              <span className="font-medium">{t('results.features')}</span>
             </div>
-            <WinnerBadge winner={data.features.winner} />
+            <WinnerBadge winner={data.features.winner} t={t} />
           </div>
           <div className="space-y-1">
             {data.features.insights.map((insight, idx) => (
@@ -131,7 +134,7 @@ export function ComparisonSummary({ data }: ComparisonSummaryProps) {
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-orange-500" />
-                <span className="font-medium">Actionable Recommendations</span>
+                <span className="font-medium">{t('results.recommendations')}</span>
               </div>
               <div className="space-y-2">
                 {data.features.recommendations.slice(0, 5).map((rec, idx) => (
