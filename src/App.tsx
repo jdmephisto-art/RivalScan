@@ -10,6 +10,7 @@ import { SeoCard } from '@/components/SeoCard';
 import { FeaturesCard } from '@/components/FeaturesCard';
 import { ComparisonSummary } from '@/components/ComparisonSummary';
 import { analyzeApi } from '@/lib/api';
+import { useTranslation } from 'react-i18next';
 import type { AnalysisResult } from '@/types';
 import { 
   BarChart3, 
@@ -23,6 +24,7 @@ import {
 } from 'lucide-react';
 
 function App() {
+  const { t } = useTranslation();
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -30,21 +32,21 @@ function App() {
     setIsLoading(true);
     setResult(null);
     
-    toast.info('Starting comprehensive analysis...', {
-      description: 'This may take 30-60 seconds. Please wait.',
+    toast.info(t('app.analyzingTitle') || 'Starting comprehensive analysis...', {
+      description: t('app.analyzingDesc') || 'This may take 30-60 seconds. Please wait.',
       duration: 5000
     });
 
     try {
       const data = await analyzeApi.fullAnalysis(yourUrl, competitorUrl);
       setResult(data);
-      toast.success('Analysis complete!', {
-        description: 'View your competitive insights below.'
+      toast.success(t('app.analysisComplete') || 'Analysis complete!', {
+        description: t('app.viewInsights') || 'View your competitive insights below.'
       });
     } catch (error) {
       console.error('Analysis error:', error);
-      toast.error('Analysis failed', {
-        description: error instanceof Error ? error.message : 'Please try again.'
+      toast.error(t('app.analysisFailed') || 'Analysis failed', {
+        description: error instanceof Error ? error.message : (t('app.tryAgain') || 'Please try again.')
       });
     } finally {
       setIsLoading(false);
@@ -64,9 +66,9 @@ function App() {
                 <Target className="w-6 h-6 text-primary-foreground" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold">Competitor Tech Intelligence</h1>
+                <h1 className="text-2xl font-bold">{t('app.title')}</h1>
                 <p className="text-sm text-muted-foreground">
-                  Analyze your competitors' tech stack, performance, and features
+                  {t('app.description')}
                 </p>
               </div>
             </div>
@@ -85,9 +87,9 @@ function App() {
         {isLoading && (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="w-12 h-12 animate-spin text-primary mb-4" />
-            <p className="text-lg font-medium">Analyzing websites...</p>
+            <p className="text-lg font-medium">{t('app.analyzing')}</p>
             <p className="text-sm text-muted-foreground">
-              Running tech stack detection, performance audit, SEO analysis, and feature detection
+              {t('app.runningAnalysis')}
             </p>
           </div>
         )}
@@ -103,19 +105,19 @@ function App() {
               <TabsList className="grid w-full grid-cols-4 lg:w-fit">
                 <TabsTrigger value="tech" className="flex items-center gap-2">
                   <Code2 className="w-4 h-4" />
-                  <span className="hidden sm:inline">Tech Stack</span>
+                  <span className="hidden sm:inline">{t('results.techStack')}</span>
                 </TabsTrigger>
                 <TabsTrigger value="performance" className="flex items-center gap-2">
                   <Zap className="w-4 h-4" />
-                  <span className="hidden sm:inline">Performance</span>
+                  <span className="hidden sm:inline">{t('results.performance')}</span>
                 </TabsTrigger>
                 <TabsTrigger value="seo" className="flex items-center gap-2">
                   <Search className="w-4 h-4" />
-                  <span className="hidden sm:inline">SEO</span>
+                  <span className="hidden sm:inline">{t('results.seo')}</span>
                 </TabsTrigger>
                 <TabsTrigger value="features" className="flex items-center gap-2">
                   <Sparkles className="w-4 h-4" />
-                  <span className="hidden sm:inline">Features</span>
+                  <span className="hidden sm:inline">{t('results.features')}</span>
                 </TabsTrigger>
               </TabsList>
 
@@ -123,11 +125,11 @@ function App() {
               <TabsContent value="tech" className="mt-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <TechStackCard 
-                    title="Your Tech Stack" 
+                    title={t('techStack.yourTechStack')} 
                     data={result.yourSite.tech} 
                   />
                   <TechStackCard 
-                    title="Competitor Tech Stack" 
+                    title={t('techStack.competitorTechStack')} 
                     data={result.competitor.tech} 
                     isCompetitor 
                   />
@@ -138,11 +140,11 @@ function App() {
               <TabsContent value="performance" className="mt-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <PerformanceCard 
-                    title="Your Performance" 
+                    title={t('performance.yourPerformance')} 
                     data={result.yourSite.performance} 
                   />
                   <PerformanceCard 
-                    title="Competitor Performance" 
+                    title={t('performance.competitorPerformance')} 
                     data={result.competitor.performance} 
                     isCompetitor 
                   />
@@ -153,11 +155,11 @@ function App() {
               <TabsContent value="seo" className="mt-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <SeoCard 
-                    title="Your SEO" 
+                    title={t('seo.yourSEO')} 
                     data={result.yourSite.seo} 
                   />
                   <SeoCard 
-                    title="Competitor SEO" 
+                    title={t('seo.competitorSEO')} 
                     data={result.competitor.seo} 
                     isCompetitor 
                   />
@@ -168,11 +170,11 @@ function App() {
               <TabsContent value="features" className="mt-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <FeaturesCard 
-                    title="Your Features" 
+                    title={t('features.yourFeatures')} 
                     data={result.yourSite.features} 
                   />
                   <FeaturesCard 
-                    title="Competitor Features" 
+                    title={t('features.competitorFeatures')} 
                     data={result.competitor.features} 
                     isCompetitor 
                   />
@@ -182,9 +184,9 @@ function App() {
 
             {/* Footer */}
             <footer className="text-center text-sm text-muted-foreground pt-8 border-t">
-              <p>Analysis completed at {new Date(result.timestamp).toLocaleString()}</p>
+              <p>{t('app.analysisCompletedAt')} {new Date(result.timestamp).toLocaleString()}</p>
               <p className="mt-1">
-                Comparing {result.yourSite.url} vs {result.competitor.url}
+                {t('app.comparing')} {result.yourSite.url} vs {result.competitor.url}
               </p>
             </footer>
           </div>
@@ -207,27 +209,26 @@ function App() {
                 <Sparkles className="w-8 h-8 text-purple-600 dark:text-purple-300" />
               </div>
             </div>
-            <h2 className="text-xl font-semibold mb-2">Ready to analyze your competition?</h2>
+            <h2 className="text-xl font-semibold mb-2">{t('app.readyToAnalyze')}</h2>
             <p className="text-muted-foreground max-w-md mx-auto">
-              Enter your website and a competitor's URL above to get insights on their 
-              technology stack, performance metrics, SEO optimization, and key features.
+              {t('app.enterUrls')}
             </p>
             <div className="flex flex-wrap justify-center gap-4 mt-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
-                Tech Stack Detection
+                {t('app.techStackDetection')}
               </div>
               <div className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
-                Performance Audit
+                {t('app.performanceAudit')}
               </div>
               <div className="flex items-center gap-2">
                 <Search className="w-4 h-4" />
-                SEO Analysis
+                {t('app.seoAnalysis')}
               </div>
               <div className="flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
-                Feature Detection
+                {t('app.featureDetection')}
               </div>
             </div>
           </div>
