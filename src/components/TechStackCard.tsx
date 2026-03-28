@@ -2,6 +2,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Code2, Server, Palette, BarChart3, MessageSquare, CreditCard, Globe, Wrench } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { TechStackData } from '@/types';
 
 interface TechStackCardProps {
@@ -32,7 +33,20 @@ const categoryColors: Record<string, string> = {
   'Utilities': 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200'
 };
 
+const categoryKeys: Record<string, string> = {
+  'Framework': 'framework',
+  'Styling': 'styling',
+  'Analytics': 'analytics',
+  'Communication': 'communication',
+  'Payment': 'payment',
+  'Hosting': 'hosting',
+  'CMS': 'cms',
+  'Utilities': 'utilities'
+};
+
 export function TechStackCard({ title, data, isCompetitor = false }: TechStackCardProps) {
+  const { t } = useTranslation();
+
   if (data.error) {
     return (
       <Card className={isCompetitor ? 'border-red-200 dark:border-red-800' : ''}>
@@ -40,7 +54,7 @@ export function TechStackCard({ title, data, isCompetitor = false }: TechStackCa
           <CardTitle className="text-lg">{title}</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-red-500">Failed to analyze: {data.error}</p>
+          <p className="text-sm text-red-500">{t('errors.analysisFailed')}: {data.error}</p>
         </CardContent>
       </Card>
     );
@@ -54,19 +68,19 @@ export function TechStackCard({ title, data, isCompetitor = false }: TechStackCa
         <CardTitle className="text-lg flex items-center justify-between">
           {title}
           <Badge variant="secondary" className="font-mono">
-            {data.totalCount} detected
+            {data.totalCount} {t('techStack.detected')}
           </Badge>
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         {!hasData ? (
-          <p className="text-sm text-muted-foreground">No technologies detected</p>
+          <p className="text-sm text-muted-foreground">{t('techStack.none')}</p>
         ) : (
           Object.entries(data.categorized || {}).map(([category, techs]) => (
             <div key={category} className="space-y-2">
               <div className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
                 {categoryIcons[category] || <Wrench className="w-4 h-4" />}
-                {category}
+                {t(`categories.${categoryKeys[category] || 'utilities'}`)}
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {techs.map((tech) => (
@@ -87,7 +101,7 @@ export function TechStackCard({ title, data, isCompetitor = false }: TechStackCa
           <>
             <Separator />
             <div className="space-y-2">
-              <div className="text-sm font-medium text-muted-foreground">All Technologies</div>
+              <div className="text-sm font-medium text-muted-foreground">{t('techStack.allTechnologies')}</div>
               <div className="flex flex-wrap gap-1.5">
                 {data.technologies.map((tech) => (
                   <Badge key={tech} variant="outline" className="text-xs">
