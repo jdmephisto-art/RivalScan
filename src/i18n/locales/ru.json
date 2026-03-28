@@ -3,7 +3,21 @@
     "title": "Анализ конкурентов",
     "description": "Анализируйте технологии, производительность и фичи конкурентов",
     "readyToAnalyze": "Готовы проанализировать конкурентов?",
-    "enterUrls": "Введите URL вашего сайта и сайта конкурента выше, чтобы получить информацию о технологиях, производительности, SEO и ключевых функциях"
+    "enterUrls": "Введите URL вашего сайта и сайта конкурента выше, чтобы получить информацию о технологиях, производительности, SEO и ключевых функциях",
+    "analyzing": "Анализируем сайты...",
+    "runningAnalysis": "Запускаем детектор технологий, аудит производительности, SEO-анализ и детекцию функций",
+    "analyzingTitle": "Запускаем комплексный анализ...",
+    "analyzingDesc": "Это может занять 30-60 секунд. Пожалуйста, подождите.",
+    "analysisComplete": "Анализ завершен!",
+    "viewInsights": "Смотрите результаты анализа ниже.",
+    "analysisFailed": "Ошибка анализа",
+    "tryAgain": "Пожалуйста, попробуйте снова.",
+    "analysisCompletedAt": "Анализ завершен:",
+    "comparing": "Сравнение",
+    "techStackDetection": "Детекция технологий",
+    "performanceAudit": "Аудит производительности",
+    "seoAnalysis": "SEO-анализ",
+    "featureDetection": "Детекция функций"
   },
   "nav": {
     "analyze": "Анализ",
@@ -19,7 +33,7 @@
   },
   "results": {
     "title": "Сводка анализа конкурентов",
-    "techStack": "Технологический стек",
+    "techStack": "Технологии",
     "performance": "Производительность",
     "seo": "SEO",
     "features": "Функционал",
@@ -38,7 +52,9 @@
     "seo": "SEO",
     "coreWebVitals": "Core Web Vitals",
     "opportunities": "Возможности для улучшения",
-    "save": "Сэкономьте"
+    "save": "Сэкономьте",
+    "yourPerformance": "Ваша производительность",
+    "competitorPerformance": "Производительность конкурента"
   },
   "metrics": {
     "fcp": "First Contentful Paint",
@@ -51,7 +67,9 @@
   "techStack": {
     "detected": "обнаружено",
     "none": "Технологии не обнаружены",
-    "allTechnologies": "Все технологии"
+    "allTechnologies": "Все технологии",
+    "yourTechStack": "Ваш технологический стек",
+    "competitorTechStack": "Технологический стек конкурента"
   },
   "categories": {
     "framework": "Фреймворк",
@@ -62,6 +80,14 @@
     "hosting": "Хостинг",
     "cms": "CMS",
     "utilities": "Утилиты"
+  },
+  "seo": {
+    "yourSEO": "Ваш SEO",
+    "competitorSEO": "SEO конкурента"
+  },
+  "features": {
+    "yourFeatures": "Ваши функции",
+    "competitorFeatures": "Функции конкурента"
   },
   "errors": {
     "invalidUrl": "Неверный формат URL",
