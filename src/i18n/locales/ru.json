@@ -1,7 +1,9 @@
 {
   "app": {
     "title": "Анализ конкурентов",
-    "description": "Анализируйте технологии, производительность и фичи конкурентов"
+    "description": "Анализируйте технологии, производительность и фичи конкурентов",
+    "readyToAnalyze": "Готовы проанализировать конкурентов?",
+    "enterUrls": "Введите URL вашего сайта и сайта конкурента выше, чтобы получить информацию о технологиях, производительности, SEO и ключевых функциях"
   },
   "nav": {
     "analyze": "Анализ",
@@ -25,7 +27,41 @@
     "winner": "Победитель",
     "tie": "Ничья",
     "you": "Вы",
-    "competitor": "Конкурент"
+    "competitor": "Конкурент",
+    "youWin": "Вы победили",
+    "competitorWins": "Победил конкурент"
+  },
+  "performance": {
+    "performance": "Производительность",
+    "accessibility": "Доступность",
+    "bestPractices": "Лучшие практики",
+    "seo": "SEO",
+    "coreWebVitals": "Core Web Vitals",
+    "opportunities": "Возможности для улучшения",
+    "save": "Сэкономьте"
+  },
+  "metrics": {
+    "fcp": "First Contentful Paint",
+    "lcp": "Largest Contentful Paint",
+    "tti": "Time to Interactive",
+    "speedIndex": "Speed Index",
+    "tbt": "Total Blocking Time",
+    "cls": "Cumulative Layout Shift"
+  },
+  "techStack": {
+    "detected": "обнаружено",
+    "none": "Технологии не обнаружены",
+    "allTechnologies": "Все технологии"
+  },
+  "categories": {
+    "framework": "Фреймворк",
+    "styling": "Стили",
+    "analytics": "Аналитика",
+    "communication": "Коммуникации",
+    "payment": "Платежи",
+    "hosting": "Хостинг",
+    "cms": "CMS",
+    "utilities": "Утилиты"
   },
   "errors": {
     "invalidUrl": "Неверный формат URL",
